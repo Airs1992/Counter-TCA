@@ -12,13 +12,43 @@ import XCTest
 
 @MainActor
 final class CounterTests: XCTestCase {
-    func testCounterIncrement() throws {
+    func testCounterIncrement() async throws {
+
         let store = TestStore(
-            initialState: CounterReducer.State(count: Int.random(in: -100...100)),
+            initialState: CounterReducer.State(),
             reducer: CounterReducer()
         )
-        store.send(.increment) { state in
+
+        await store.send(.increment) { state in
             state.count += 1
+        }
+
+        await store.receive(.changeCountColor(1)) { state in
+            state.count = 1
+            state.colorHex = 0x00FF00
+        }
+
+        await store.send(.decrement) { state in
+            state.count -= 1
+        }
+
+        await store.receive(.changeCountColor(0)) { state in
+            state.count = 0
+            state.colorHex = 0x000000
+        }
+
+        await store.send(.decrement) { state in
+            state.count -= 1
+        }
+
+        await store.receive(.changeCountColor(-1)) { state in
+            state.count = -1
+            state.colorHex = 0xFF0000
+        }
+
+        await store.send(.reset) { state in
+            state.count = 0
+            state.colorHex = 0x000000
         }
     }
 }
