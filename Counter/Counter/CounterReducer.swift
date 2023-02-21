@@ -10,11 +10,10 @@ import ComposableArchitecture
 public struct CounterReducer: ReducerProtocol {
     public struct State: Equatable {
         var count = 0
-        @BindingState var colorHex = 0x000000
+        var colorHex = 0x000000
     }
 
-    public enum Action: BindableAction, Equatable {
-        case binding(BindingAction<State>)
+    public enum Action: Equatable {
         case increment
         case decrement
         case changeCountColor(Int)
@@ -29,8 +28,6 @@ public struct CounterReducer: ReducerProtocol {
         case .increment:
             state.count += 1
             return .send(.changeCountColor(state.count))
-        case .binding:
-            return .none
         case .reset:
             state.count = 0
             state.colorHex = 0x000000
