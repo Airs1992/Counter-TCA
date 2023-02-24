@@ -9,7 +9,7 @@ import ComposableArchitecture
 
 public struct CounterReducer: ReducerProtocol {
     public struct State: Equatable {
-        let secret = Int.random(in: -100 ... 100)
+        var secret = Int.random(in: -100 ... 100)
         var count = 0
         var colorHex = 0x000000
         // @BindingStatとBindableAction、case binding(BindingAction<State>)入れるとアクション追加しなくてもBindingは成立します。
@@ -24,6 +24,7 @@ public struct CounterReducer: ReducerProtocol {
         case changeCountColor(Int)
         case setToggleState(Bool)
         case reset
+        case playNext
     }
 
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -54,6 +55,11 @@ public struct CounterReducer: ReducerProtocol {
             return .none
         case .setToggleState(let flag):
             state.toggleState = flag
+            return .none
+        case .playNext:
+            state.count = 0
+            state.colorHex = 0x000000
+            state.secret = Int.random(in: -100 ... 100)
             return .none
         }
     }

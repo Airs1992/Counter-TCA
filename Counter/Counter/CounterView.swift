@@ -40,7 +40,8 @@ public struct CounterView: View {
                     .foregroundColor(Color.init(hex: UInt(viewStore.state.colorHex)))
                     Button("+") { viewStore.send(.increment) }
                 }
-                Button("reset") { viewStore.send(.reset) }
+                Button("Reset") { viewStore.send(.reset) }
+                Button("Next") { viewStore.send(.playNext) }
                 Toggle("Toggle", isOn: viewStore.binding(get: \.toggleState, send: CounterReducer.Action.setToggleState))
             }
 
