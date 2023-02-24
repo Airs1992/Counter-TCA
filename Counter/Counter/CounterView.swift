@@ -32,11 +32,7 @@ public struct CounterView: View {
                         String(viewStore.count),
                         // bindingはsetCount(count)Actionをreducerに渡す、後はreducer内でstateを更新する。
                         // get:内に設定したValueはreducer内更新したValue
-                        text: viewStore.binding(get: { counter in
-                            return String(counter.count)
-                        }, send: { count in
-                            return CounterReducer.Action.setCount(count)
-                        })
+                        text: viewStore.binding(get: \.countString, send: CounterReducer.Action.setCount)
                     )
                     .frame(width: 40)
                     .multilineTextAlignment(.center)
