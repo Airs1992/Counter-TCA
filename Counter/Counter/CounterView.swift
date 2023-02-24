@@ -25,6 +25,7 @@ public struct CounterView: View {
     public var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
+                checkLabel(with: viewStore.checkResult)
                 HStack {
                     // 1
                     Button("-") { viewStore.send(.decrement) }
@@ -43,6 +44,20 @@ public struct CounterView: View {
                 Toggle("Toggle", isOn: viewStore.binding(get: \.toggleState, send: CounterReducer.Action.setToggleState))
             }
 
+        }
+    }
+
+    func checkLabel(with checkResult: CounterReducer.State.CheckResult) -> some View {
+        switch checkResult {
+        case .lower:
+          return Label("Lower", systemImage: "lessthan.circle")
+            .foregroundColor(.red)
+        case .higher:
+          return Label("Higher", systemImage: "greaterthan.circle")
+            .foregroundColor(.red)
+        case .equal:
+          return Label("Correct", systemImage: "checkmark.circle")
+            .foregroundColor(.green)
         }
     }
 }

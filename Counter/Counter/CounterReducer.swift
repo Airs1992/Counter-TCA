@@ -9,6 +9,7 @@ import ComposableArchitecture
 
 public struct CounterReducer: ReducerProtocol {
     public struct State: Equatable {
+        let secret = Int.random(in: -100 ... 100)
         var count = 0
         var colorHex = 0x000000
         // @BindingStatとBindableAction、case binding(BindingAction<State>)入れるとアクション追加しなくてもBindingは成立します。
@@ -59,8 +60,19 @@ public struct CounterReducer: ReducerProtocol {
 }
 
 extension CounterReducer.State {
-  var countString: String {
-    get { String(count) }
-    set { count = Int(newValue) ?? count }
-  }
+    var countString: String {
+        get { String(count) }
+        set { count = Int(newValue) ?? count }
+    }
+}
+
+extension CounterReducer.State {
+    enum CheckResult {
+        case lower, equal, higher
+    }
+    var checkResult: CheckResult {
+        if count < secret { return .lower }
+        if count > secret { return .higher }
+        return .equal
+    }
 }
