@@ -43,10 +43,15 @@ public struct CounterReducer: ReducerProtocol {
             }
             return .none
         case .setCount(let text):
-            if let value = Int(text) {
-                state.count = value
-            }
+            state.countString = text
             return .none
         }
     }
+}
+
+extension CounterReducer.State {
+  var countString: String {
+    get { String(count) }
+    set { count = Int(newValue) ?? count }
+  }
 }
