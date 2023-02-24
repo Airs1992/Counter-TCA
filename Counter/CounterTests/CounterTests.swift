@@ -51,4 +51,15 @@ final class CounterTests: XCTestCase {
             state.colorHex = 0x000000
         }
     }
+
+    func testSetCount() throws {
+        let store = TestStore(
+            initialState: CounterReducer.State(),
+            reducer: CounterReducer()
+        )
+
+        store.send(.setCount("1")) { state in
+            state.count = 1
+        }
+    }
 }
