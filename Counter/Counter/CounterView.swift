@@ -40,6 +40,7 @@ public struct CounterView: View {
                     Button("+") { viewStore.send(.increment) }
                 }
                 Button("reset") { viewStore.send(.reset) }
+                Toggle("Toggle", isOn: viewStore.binding(get: \.toggleState, send: CounterReducer.Action.setToggleState))
             }
 
         }
