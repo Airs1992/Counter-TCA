@@ -16,6 +16,7 @@ public struct CounterReducer: ReducerProtocol {
     public enum Action: Equatable {
         case increment
         case decrement
+        case setCount(String)
         case changeCountColor(Int)
         case reset
     }
@@ -39,6 +40,11 @@ public struct CounterReducer: ReducerProtocol {
                 state.colorHex = 0xFF0000
             } else {
                 state.colorHex = 0x000000
+            }
+            return .none
+        case .setCount(let text):
+            if let value = Int(text) {
+                state.count = value
             }
             return .none
         }

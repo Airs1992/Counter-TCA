@@ -28,8 +28,19 @@ public struct CounterView: View {
                 HStack {
                     // 1
                     Button("-") { viewStore.send(.decrement) }
-                    Text("\(viewStore.count)")
-                        .foregroundColor(Color.init(hex: UInt(viewStore.state.colorHex)))
+                    TextField(
+                        String(viewStore.count),
+                        // bindingはsetCount(count)Actionをreducerに渡す、後はreducer内でstateを更新する。
+                        // get:内に設定したValueはreducer内更新したValue
+                        text: viewStore.binding(get: { counter in
+                            return String(counter.count)
+                        }, send: { count in
+                            return CounterReducer.Action.setCount(count)
+                        })
+                    )
+                    .frame(width: 40)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.init(hex: UInt(viewStore.state.colorHex)))
                     Button("+") { viewStore.send(.increment) }
                 }
                 Button("reset") { viewStore.send(.reset) }
