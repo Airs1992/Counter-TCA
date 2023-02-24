@@ -52,14 +52,22 @@ final class CounterTests: XCTestCase {
         }
     }
 
-    func testSetCount() throws {
+    func testSetCount() async throws {
         let store = TestStore(
             initialState: CounterReducer.State(),
             reducer: CounterReducer()
         )
 
-        store.send(.setCount("1")) { state in
+        await store.send(.setCount("1")) { state in
             state.count = 1
+        }
+
+        await store.receive(.setToggleState(true)) { state in
+            state.toggleState = true
+        }
+
+        await store.send(.setToggleState(false)) { state in
+            state.toggleState = false
         }
     }
 }

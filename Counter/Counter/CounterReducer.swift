@@ -12,7 +12,7 @@ public struct CounterReducer: ReducerProtocol {
         var count = 0
         var colorHex = 0x000000
         // @BindingStatとBindableAction、case binding(BindingAction<State>)入れるとアクション追加しなくてもBindingは成立します。
-        @BindingState var toggleState: Bool = true
+        @BindingState var toggleState: Bool = false
     }
 
     public enum Action: Equatable, BindableAction {
@@ -48,7 +48,7 @@ public struct CounterReducer: ReducerProtocol {
             return .none
         case .setCount(let text):
             state.countString = text
-            return .send(.setToggleState(text.count > 1))
+            return .send(.setToggleState(text.count >= 1))
         case .binding:
             return .none
         case .setToggleState(let flag):
