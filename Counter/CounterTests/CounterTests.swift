@@ -69,5 +69,10 @@ final class CounterTests: XCTestCase {
         await store.send(.setToggleState(false)) { state in
             state.toggleState = false
         }
+
+        await store.send(.playNext) { state in
+            state.count = 0
+            state.colorHex = 0x000000
+        }
     }
 }
