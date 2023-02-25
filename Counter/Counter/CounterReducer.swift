@@ -20,6 +20,7 @@ public struct CounterReducer: ReducerProtocol {
         case binding(BindingAction<State>)
         case increment
         case decrement
+        case slidingCount(Float)
         case setCount(String)
         case changeCountColor(Int)
         case setToggleState(Bool)
@@ -50,6 +51,9 @@ public struct CounterReducer: ReducerProtocol {
                 state.colorHex = 0x000000
             }
             return .none
+        case .slidingCount(let value):
+            state.countFloat = value
+            return .none
         case .setCount(let text):
             state.countString = text
             return .send(.setToggleState(text.count >= 1))
@@ -64,6 +68,13 @@ public struct CounterReducer: ReducerProtocol {
             state.secret = generateRandom.generateRandomInt(-100 ... 100)
             return .none
         }
+    }
+}
+
+extension CounterReducer.State {
+    var countFloat: Float {
+      get { Float(count) }
+      set { count = Int(newValue) }
     }
 }
 
