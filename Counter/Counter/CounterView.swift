@@ -25,16 +25,41 @@ public struct CounterView: View {
     public var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
+                checkLabel(with: viewStore.checkResult)
                 HStack {
                     // 1
                     Button("-") { viewStore.send(.decrement) }
-                    Text("\(viewStore.count)")
-                        .foregroundColor(Color.init(hex: UInt(viewStore.state.colorHex)))
+                    TextField(
+                        String(viewStore.count),
+                        // bindingはsetCount(count)Actionをreducerに渡す、後はreducer内でstateを更新する。
+                        // get:内に設定したValueはreducer内更新したValue
+                        text: viewStore.binding(get: \.countString, send: CounterReducer.Action.setCount)
+                    )
+                    .frame(width: 40)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.init(hex: UInt(viewStore.state.colorHex)))
                     Button("+") { viewStore.send(.increment) }
                 }
-                Button("reset") { viewStore.send(.reset) }
+                Button("Reset") { viewStore.send(.reset) }
+                Button("Next") { viewStore.send(.playNext) }
+                Slider(value: viewStore.binding(get: \.countFloat, send: CounterReducer.Action.slidingCount), in: -100...100)
+                Toggle("Toggle", isOn: viewStore.binding(get: \.toggleState, send: CounterReducer.Action.setToggleState))
             }
+            .padding(20)
+        }
+    }
 
+    func checkLabel(with checkResult: CounterReducer.State.CheckResult) -> some View {
+        switch checkResult {
+        case .lower:
+          return Label("Lower", systemImage: "lessthan.circle")
+            .foregroundColor(.red)
+        case .higher:
+          return Label("Higher", systemImage: "greaterthan.circle")
+            .foregroundColor(.red)
+        case .equal:
+          return Label("Correct", systemImage: "checkmark.circle")
+            .foregroundColor(.green)
         }
     }
 }
