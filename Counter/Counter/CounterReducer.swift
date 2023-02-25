@@ -6,9 +6,11 @@
 //
 
 import ComposableArchitecture
+import Foundation
 
 public struct CounterReducer: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Identifiable {
+        public var id: UUID = UUID()
         var secret = Int.random(in: -100 ... 100)
         var count = 0
         var colorHex = 0x000000
