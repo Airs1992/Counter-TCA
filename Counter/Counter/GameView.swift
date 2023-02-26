@@ -11,13 +11,14 @@ import ComposableArchitecture
 struct GameView: View {
     let store: StoreOf<GameReducer>
     var body: some View {
-        // GameのstateはViewをドライブする必要がない、statelessを設定する
-        WithViewStore(store.stateless) { viewStore in
-            VStack {
-                TimerView(store: store.scope(state: \.timer, action: GameReducer.Action.timer))
-                CounterView(store: store.scope(state: \.counter, action: GameReducer.Action.counter))
-            }.onAppear {
-                viewStore.send(.timer(.start))
+        VStack {
+            TimerView(store: store.scope(state: \.timer, action: GameReducer.Action.timer))
+            CounterView(store: store.scope(state: \.counter, action: GameReducer.Action.counter))
+            // GameのstateはViewをドライブする必要がない、statelessを設定する
+            WithViewStore(store.stateless) { viewStore in
+                Color.clear
+                    .frame(width: 0, height: 0)
+                    .onAppear { viewStore.send(.timer(.start)) }
             }
         }
     }
