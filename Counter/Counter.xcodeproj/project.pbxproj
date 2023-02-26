@@ -19,6 +19,7 @@
 		F17A4C9929A90FD7002D6E98 /* GenerateRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9829A90FD7002D6E98 /* GenerateRandom.swift */; };
 		F17A4C9B29AB8722002D6E98 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9A29AB8722002D6E98 /* TimerView.swift */; };
 		F17A4C9D29AB8741002D6E98 /* TimerReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9C29AB8741002D6E98 /* TimerReducer.swift */; };
+		F17A4C9F29AB96CF002D6E98 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9E29AB96CF002D6E98 /* TimerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		F17A4C9829A90FD7002D6E98 /* GenerateRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRandom.swift; sourceTree = "<group>"; };
 		F17A4C9A29AB8722002D6E98 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		F17A4C9C29AB8741002D6E98 /* TimerReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerReducer.swift; sourceTree = "<group>"; };
+		F17A4C9E29AB96CF002D6E98 /* TimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				F127C1AC29A4FD0100A4E1C6 /* CounterTests.swift */,
+				F17A4C9E29AB96CF002D6E98 /* TimerTests.swift */,
 			);
 			path = CounterTests;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F127C1AD29A4FD0100A4E1C6 /* CounterTests.swift in Sources */,
+				F17A4C9F29AB96CF002D6E98 /* TimerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
