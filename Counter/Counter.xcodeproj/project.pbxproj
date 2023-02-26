@@ -20,6 +20,8 @@
 		F17A4C9B29AB8722002D6E98 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9A29AB8722002D6E98 /* TimerView.swift */; };
 		F17A4C9D29AB8741002D6E98 /* TimerReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9C29AB8741002D6E98 /* TimerReducer.swift */; };
 		F17A4C9F29AB96CF002D6E98 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9E29AB96CF002D6E98 /* TimerTests.swift */; };
+		F17A4CA129AB9F4C002D6E98 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4CA029AB9F4C002D6E98 /* GameView.swift */; };
+		F17A4CA329AB9F61002D6E98 /* GameReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4CA229AB9F61002D6E98 /* GameReducer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,8 @@
 		F17A4C9A29AB8722002D6E98 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		F17A4C9C29AB8741002D6E98 /* TimerReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerReducer.swift; sourceTree = "<group>"; };
 		F17A4C9E29AB96CF002D6E98 /* TimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
+		F17A4CA029AB9F4C002D6E98 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		F17A4CA229AB9F61002D6E98 /* GameReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameReducer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,8 @@
 				F127C1C829A4FF3F00A4E1C6 /* CounterReducer.swift */,
 				F17A4C9A29AB8722002D6E98 /* TimerView.swift */,
 				F17A4C9C29AB8741002D6E98 /* TimerReducer.swift */,
+				F17A4CA029AB9F4C002D6E98 /* GameView.swift */,
+				F17A4CA229AB9F61002D6E98 /* GameReducer.swift */,
 				F17A4C9829A90FD7002D6E98 /* GenerateRandom.swift */,
 				F127C19F29A4FD0100A4E1C6 /* Assets.xcassets */,
 				F127C1A129A4FD0100A4E1C6 /* Preview Content */,
@@ -280,12 +286,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F17A4CA329AB9F61002D6E98 /* GameReducer.swift in Sources */,
 				F17A4C9B29AB8722002D6E98 /* TimerView.swift in Sources */,
 				F127C19E29A4FCFB00A4E1C6 /* CounterView.swift in Sources */,
 				F127C1C929A4FF3F00A4E1C6 /* CounterReducer.swift in Sources */,
 				F127C19C29A4FCFB00A4E1C6 /* CounterApp.swift in Sources */,
 				F17A4C9D29AB8741002D6E98 /* TimerReducer.swift in Sources */,
 				F17A4C9929A90FD7002D6E98 /* GenerateRandom.swift in Sources */,
+				F17A4CA129AB9F4C002D6E98 /* GameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
