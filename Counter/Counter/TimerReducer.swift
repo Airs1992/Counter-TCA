@@ -21,14 +21,25 @@ public struct TimerReducer: ReducerProtocol {
         case timeUpdated
     }
 
+    @Dependency(\.date) var date
+    @Dependency(\.mainQueue) var mainQueue
+
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        struct TimerId: Hashable {}
+
         switch action {
         case .binding:
             return .none
         case .start:
-            fatalError("Not implemented")
+            if state.started == nil {
+                state.started = self.date.now
+            }
+            let timer = EffectTask.timer(id: TimerId(), every: .milliseconds(10), tolerance: .zero, on: mainQueue)
+            return timer.map { time -> TimerReducer.Action in
+                return TimerReducer.Action.timeUpdated
+            }
         case .stop:
-            fatalError("Not implemented")
+            return .cancel(id: TimerId())
         case .timeUpdated:
             state.duration += 0.01
             return .none
