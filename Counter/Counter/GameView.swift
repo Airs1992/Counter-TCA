@@ -12,14 +12,20 @@ struct GameView: View {
     let store: StoreOf<GameReducer>
     var body: some View {
         VStack {
+            // GameのstateはViewをドライブする必要がない、statelessを設定する
+            WithViewStore(store.scope(state: \.results)) { viewStore in
+                VStack {
+                  resultLabel(viewStore.state)
+                }.onAppear {
+                  viewStore.send(.timer(.start))
+                }
+            }
             TimerView(store: store.scope(state: \.timer, action: GameReducer.Action.timer))
             CounterView(store: store.scope(state: \.counter, action: GameReducer.Action.counter))
-            // GameのstateはViewをドライブする必要がない、statelessを設定する
-            WithViewStore(store.stateless) { viewStore in
-                Color.clear
-                    .frame(width: 0, height: 0)
-                    .onAppear { viewStore.send(.timer(.start)) }
-            }
         }
+    }
+
+    func resultLabel(_ results: [GameReducer.GameResult]) -> some View {
+      Text("Result: \(results.filter(\.correct).count)/\(results.count) correct")
     }
 }
