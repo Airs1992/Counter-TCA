@@ -12,6 +12,7 @@ public struct GameReducer: ReducerProtocol {
     public struct State: Equatable {
         var counter: CounterReducer.State = .init()
         var timer: TimerReducer.State = .init()
+        var results: [GameResult] = []
     }
 
     public enum Action {
@@ -26,5 +27,13 @@ public struct GameReducer: ReducerProtocol {
         Scope(state: \.timer, action: /Action.timer) {
             TimerReducer()
         }
+    }
+}
+
+extension GameReducer {
+    struct GameResult: Equatable {
+      let secret: Int
+      let guess: Int
+      let timeSpent: TimeInterval
     }
 }
