@@ -12,7 +12,7 @@ public struct GameReducer: ReducerProtocol {
     public struct State: Equatable {
         var counter: CounterReducer.State = .init()
         var timer: TimerReducer.State = .init()
-        var results: [GameResult] = []
+        var results = IdentifiedArrayOf<GameResult>()
         var lastTimestamp = 0.0
     }
 
@@ -25,12 +25,12 @@ public struct GameReducer: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .counter(.playNext):
-              let result = GameResult(secret: state.counter.secret, guess: state.counter.count, timeSpent: state.timer.duration - state.lastTimestamp)
-              state.results.append(result)
-              state.lastTimestamp = state.timer.duration
-              return .none
+                let result = GameResult(counter: state.counter, timeSpent: state.timer.duration - state.lastTimestamp)
+                state.results.append(result)
+                state.lastTimestamp = state.timer.duration
+                return .none
             default:
-              return .none
+                return .none
             }
         }
         Scope(state: \.counter, action: /Action.counter) {
@@ -43,10 +43,11 @@ public struct GameReducer: ReducerProtocol {
 }
 
 extension GameReducer {
-    struct GameResult: Equatable {
-        let secret: Int
-        let guess: Int
+    struct GameResult: Equatable, Identifiable {
+        let counter: CounterReducer.State
         let timeSpent: TimeInterval
-        var correct: Bool { secret == guess }
+        var correct: Bool { counter.secret == counter.count }
+
+        var id: UUID { counter.id }
     }
 }

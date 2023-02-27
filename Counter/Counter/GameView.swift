@@ -15,9 +15,9 @@ struct GameView: View {
             // GameのstateはViewをドライブする必要がない、statelessを設定する
             WithViewStore(store.scope(state: \.results)) { viewStore in
                 VStack {
-                  resultLabel(viewStore.state)
+                    resultLabel(viewStore.state.elements)
                 }.onAppear {
-                  viewStore.send(.timer(.start))
+                    viewStore.send(.timer(.start))
                 }
             }
             TimerView(store: store.scope(state: \.timer, action: GameReducer.Action.timer))

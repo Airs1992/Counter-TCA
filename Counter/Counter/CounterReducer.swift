@@ -31,6 +31,7 @@ public struct CounterReducer: ReducerProtocol {
     }
 
     @Dependency(\.generateRandom) var generateRandom
+    @Dependency(\.uuid) var uuid
 
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
@@ -68,6 +69,7 @@ public struct CounterReducer: ReducerProtocol {
             state.count = 0
             state.colorHex = 0x000000
             state.secret = generateRandom.generateRandomInt(-100 ... 100)
+            state.id = uuid()
             return .none
         }
     }
