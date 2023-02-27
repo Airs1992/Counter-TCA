@@ -12,6 +12,7 @@ public struct GameResultListReducer: ReducerProtocol {
     public struct State: Equatable {
         var results = IdentifiedArrayOf<GameReducer.GameResult>()
     }
+    
     public enum Action {
       case remove(offset: IndexSet)
     }

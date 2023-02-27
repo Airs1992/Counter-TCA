@@ -11,7 +11,9 @@ import SwiftUI
 struct CounterApp: App {
     var body: some Scene {
         WindowGroup {
-            GameView(store: .init(initialState: .init(), reducer: GameReducer()._printChanges()))
+            NavigationView {
+                GameView(store: .init(initialState: .init(), reducer: GameReducer()._printChanges()))
+            }
         }
     }
 }

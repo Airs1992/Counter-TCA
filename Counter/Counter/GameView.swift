@@ -13,7 +13,7 @@ struct GameView: View {
     var body: some View {
         VStack {
             // GameのstateはViewをドライブする必要がない、statelessを設定する
-            WithViewStore(store.scope(state: \.results)) { viewStore in
+            WithViewStore(store.scope(state: \.resultList.results)) { viewStore in
                 VStack {
                     resultLabel(viewStore.state.elements)
                 }.onAppear {
@@ -22,6 +22,13 @@ struct GameView: View {
             }
             TimerView(store: store.scope(state: \.timer, action: GameReducer.Action.timer))
             CounterView(store: store.scope(state: \.counter, action: GameReducer.Action.counter))
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink("Detail") {
+                    GameResultListView(store: store.scope(state: \.resultList, action: GameReducer.Action.resultList))
+                }
+            }
         }
     }
 

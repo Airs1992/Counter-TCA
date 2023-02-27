@@ -12,13 +12,15 @@ public struct GameReducer: ReducerProtocol {
     public struct State: Equatable {
         var counter: CounterReducer.State = .init()
         var timer: TimerReducer.State = .init()
-        var results = IdentifiedArrayOf<GameResult>()
+        var resultList: GameResultListReducer.State = .init()
+//        var results = IdentifiedArrayOf<GameResult>()
         var lastTimestamp = 0.0
     }
 
     public enum Action {
         case counter(CounterReducer.Action)
         case timer(TimerReducer.Action)
+        case resultList(GameResultListReducer.Action)
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -26,7 +28,7 @@ public struct GameReducer: ReducerProtocol {
             switch action {
             case .counter(.playNext):
                 let result = GameResult(counter: state.counter, timeSpent: state.timer.duration - state.lastTimestamp)
-                state.results.append(result)
+                state.resultList.results.append(result)
                 state.lastTimestamp = state.timer.duration
                 return .none
             default:
@@ -39,15 +41,18 @@ public struct GameReducer: ReducerProtocol {
         Scope(state: \.timer, action: /Action.timer) {
             TimerReducer()
         }
+        Scope(state: \.resultList, action: /Action.resultList) {
+            GameResultListReducer()
+        }
     }
 }
 
 extension GameReducer {
-    struct GameResult: Equatable, Identifiable {
+    public struct GameResult: Equatable, Identifiable {
         let counter: CounterReducer.State
         let timeSpent: TimeInterval
         var correct: Bool { counter.secret == counter.count }
 
-        var id: UUID { counter.id }
+        public var id: UUID { counter.id }
     }
 }
