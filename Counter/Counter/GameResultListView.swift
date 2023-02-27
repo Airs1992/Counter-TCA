@@ -18,8 +18,13 @@ struct GameResultListView: View {
                         Image(systemName: result.correct ? "checkmark.circle" : "x.circle")
                         Text("Secret: \(result.counter.secret)")
                         Text("Answer: \(result.counter.count)")
-                    }.foregroundColor(result.correct ? .green : .red)
+                    }
+                    .foregroundColor(result.correct ? .green : .red)
                 }
+                .onDelete { viewStore.send(.remove(offset: $0)) }
+            }
+            .toolbar {
+                EditButton()
             }
         }
     }
