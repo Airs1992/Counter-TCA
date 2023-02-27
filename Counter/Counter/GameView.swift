@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct GameView: View {
+    let resultListStateTag = UUID()
     let store: StoreOf<GameReducer>
     var body: some View {
         VStack {
@@ -25,8 +26,16 @@ struct GameView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink("Detail") {
-                    GameResultListView(store: store.scope(state: \.resultList, action: GameReducer.Action.resultList))
+//                NavigationLink("Detail") {
+//                    GameResultListView(store: store.scope(state: \.resultList, action: GameReducer.Action.resultList))
+//                }
+                
+                WithViewStore(store) { viewStore in
+                    NavigationLink("Detail", tag: resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
+                        IfLetStore(store.scope(state: \.resultListState?.value,
+                                              action: GameReducer.Action.resultList),
+                                                then: { GameResultListView(store: $0) })
+                    })
                 }
             }
         }
