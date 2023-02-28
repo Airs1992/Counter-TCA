@@ -31,6 +31,8 @@ struct GameView: View {
 //                }
                 
                 WithViewStore(store) { viewStore in
+                    // 1. selection発動後 .setNavigation(resultListStateTag)が送信される、reducerでアクションを取る、stateを更新する
+                    // 2. NavigationLinkはselectionがbindingされたstateの値とtagの値比べます、同一の場合、destination内のビューに遷移する（statesを変更すると、画面が変わる仕組みになってます）
                     NavigationLink("Detail", tag: resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
                         IfLetStore(store.scope(state: \.resultListState?.value,
                                               action: GameReducer.Action.resultList),
