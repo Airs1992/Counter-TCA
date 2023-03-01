@@ -18,6 +18,7 @@ public struct GameReducer: ReducerProtocol {
         // これを入れるによって、GameResultListReducer.Stateは二個あります
         // 自分表示用とプッシュ表示用に分けます
         var resultListState: Identified<UUID, GameResultListReducer.State>?
+        var alert: AlertState<GameAlertAction>?
     }
 
     public enum Action {
@@ -25,6 +26,13 @@ public struct GameReducer: ReducerProtocol {
         case timer(TimerReducer.Action)
         case resultList(GameResultListReducer.Action)
         case setNavigation(UUID?)
+        case alertAction(GameAlertAction)
+    }
+
+    public enum GameAlertAction: Equatable {
+      case alertSaveButtonTapped
+      case alertCancelButtonTapped
+      case alertDismiss
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -40,7 +48,26 @@ public struct GameReducer: ReducerProtocol {
                 state.resultListState = .init(state.resultList, id: id)
                 return .none
             case .setNavigation(.none):
+                if state.resultListState?.value.results != state.resultList.results {
+                    state.alert = .init(
+                        title: .init("Save Changes?"),
+                        primaryButton: .default(.init("OK"), action: .send(.alertSaveButtonTapped)),
+                        secondaryButton: .cancel(.init("Cancel"), action: .send(.alertCancelButtonTapped))
+                    )
+                } else {
+                    state.resultListState = nil
+                }
+                return .none
+            // .alertDismissはアラートがdismissされた後に発動する、その後TCAは具体出来にどのボタンタップされたによってbindingされたアクションを送信する、なので.alertDismiss内でnilを設定する、.alertSaveButtonTappedと.alertCancelButtonTapped内でロジックを書く
+            case .alertAction(.alertDismiss):
+                state.alert = nil
+                return .none
+            case .alertAction(.alertSaveButtonTapped):
+                // Todo: ここはサーバーリクエストしてresultListを設定するのが一番ですが，一旦直接渡しにします
                 state.resultList.results = state.resultListState?.value.results ?? []
+                state.resultListState = nil
+                return .none
+            case .alertAction(.alertCancelButtonTapped):
                 state.resultListState = nil
                 return .none
             default:

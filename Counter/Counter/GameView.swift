@@ -42,6 +42,10 @@ struct GameView: View {
                 }
             }
         }
+        .alert(
+            store.scope(state: \.alert, action: GameReducer.Action.alertAction),
+            dismiss: .alertDismiss
+        )
     }
 
     func resultLabel(_ results: [GameReducer.GameResult]) -> some View {
