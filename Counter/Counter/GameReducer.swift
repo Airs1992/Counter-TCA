@@ -36,6 +36,7 @@ public struct GameReducer: ReducerProtocol {
                 state.lastTimestamp = state.timer.duration
                 return .none
             case .setNavigation(.some(let id)):
+                // ここでresultListStateを新しく作ってナビゲーション発動する事によって、遷移先のGameResultListがstateの変更がある場合、その修正が全てresultListState.value内に渡される、resultListState.valueをresultListに渡さない限り、Gameのstateは昔のままになる（例えばユーザーをstateの変更をやめる場合、昔のstateに戻るのが可能になる）
                 state.resultListState = .init(state.resultList, id: id)
                 return .none
             case .setNavigation(.none):
