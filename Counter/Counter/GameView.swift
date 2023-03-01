@@ -34,10 +34,16 @@ struct GameView: View {
                     // 1. selection発動後 .setNavigation(resultListStateTag)が送信される、reducerでアクションを取る、stateを更新する
                     // 2. NavigationLinkはselectionがbindingされたstateの値とtagの値比べます、同一の場合、destination内のビューに遷移する（statesを変更すると、画面が変わる仕組みになってます）
                     // 3. IfLetStoreはオプショナルの値を判定し、nilじゃない場合thenの処理に入る、中の引数はscopeされたstoreとアクション（以下の場合stateはresultListState?.value、actionはGameReducer.Action.resultList、なので$0を使ってGameResultListView作成する事が可能）
-                    NavigationLink("Detail", tag: resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
+                    NavigationLink(tag: resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
                         IfLetStore(store.scope(state: \.resultListState?.value,
                                               action: GameReducer.Action.resultList),
                                                 then: { GameResultListView(store: $0) })
+                    }, label: {
+                        if viewStore.savingResults {
+                            ProgressView()
+                        } else {
+                            Text("Detail")
+                        }
                     })
                 }
             }

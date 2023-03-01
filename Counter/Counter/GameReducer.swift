@@ -19,6 +19,7 @@ public struct GameReducer: ReducerProtocol {
         // 自分表示用とプッシュ表示用に分けます
         var resultListState: Identified<UUID, GameResultListReducer.State>?
         var alert: AlertState<GameAlertAction>?
+        var savingResults: Bool = false
     }
 
     public enum Action {
@@ -27,6 +28,7 @@ public struct GameReducer: ReducerProtocol {
         case resultList(GameResultListReducer.Action)
         case setNavigation(UUID?)
         case alertAction(GameAlertAction)
+        case saveResult(Result<Void, URLError>)
     }
 
     public enum GameAlertAction: Equatable {
@@ -34,6 +36,8 @@ public struct GameReducer: ReducerProtocol {
       case alertCancelButtonTapped
       case alertDismiss
     }
+
+    @Dependency(\.mainQueue) var mainQueue
 
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
@@ -64,10 +68,20 @@ public struct GameReducer: ReducerProtocol {
                 return .none
             case .alertAction(.alertSaveButtonTapped):
                 // Todo: ここはサーバーリクエストしてresultListを設定するのが一番ですが，一旦直接渡しにします
-                state.resultList.results = state.resultListState?.value.results ?? []
+//                state.resultList.results = state.resultListState?.value.results ?? []
+//                state.resultListState = nil
+                // ここはdelayでリクエスト模擬する
+                state.savingResults = true
+                return EffectTask(value: .saveResult(.success(())))
+                    .delay(for: 2, scheduler: mainQueue)
+                    .eraseToEffect()
+            case .alertAction(.alertCancelButtonTapped):
                 state.resultListState = nil
                 return .none
-            case .alertAction(.alertCancelButtonTapped):
+            // ここのエラー処理は一旦後回しにします
+            case .saveResult:
+                state.savingResults = false
+                state.resultList.results = state.resultListState?.value.results ?? []
                 state.resultListState = nil
                 return .none
             default:
