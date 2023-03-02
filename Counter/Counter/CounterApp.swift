@@ -13,6 +13,7 @@ struct CounterApp: App {
     var body: some Scene {
 
         let resultListStateTag = UUID()
+        let resultListStateTagModal = UUID()
 
         let sample: IdentifiedArrayOf<GameReducer.GameResult> = [
             .init(counter: .init(id: .init(), secret: 10, count: 10), timeSpent: 100),
@@ -25,6 +26,7 @@ struct CounterApp: App {
           resultList: .init(results: sample),
           lastTimestamp: 100,
           resultListState: .init(.init(results: sample), id: resultListStateTag)
+//          resultListStateModal: .init(.init(results: sample), id: resultListStateTagModal)
         )
 
         WindowGroup {

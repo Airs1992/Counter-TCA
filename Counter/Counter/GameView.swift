@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 struct GameView: View {
     let resultListStateTag = UUID()
+    let resultListStateTagModal = UUID()
     let store: StoreOf<GameReducer>
     var body: some View {
         VStack {
@@ -34,7 +35,7 @@ struct GameView: View {
                     // 1. selection発動後 .setNavigation(resultListStateTag)が送信される、reducerでアクションを取る、stateを更新する
                     // 2. NavigationLinkはselectionがbindingされたstateの値とtagの値比べます、同一の場合、destination内のビューに遷移する（statesを変更すると、画面が変わる仕組みになってます）
                     // 3. IfLetStoreはオプショナルの値を判定し、nilじゃない場合thenの処理に入る、中の引数はscopeされたstoreとアクション（以下の場合stateはresultListState?.value、actionはGameReducer.Action.resultList、なので$0を使ってGameResultListView作成する事が可能）
-                    NavigationLink(tag: resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
+                    NavigationLink(tag: viewStore.resultListState?.id ?? resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
                         IfLetStore(store.scope(state: \.resultListState?.value,
                                               action: GameReducer.Action.resultList),
                                                 then: { GameResultListView(store: $0) })
@@ -45,6 +46,22 @@ struct GameView: View {
                             Text("Detail")
                         }
                     })
+                }
+            }
+
+
+            ToolbarItem(placement: .navigationBarLeading) {
+                WithViewStore(store) { viewStore in
+                    Button("Modal") {
+                        viewStore.send(.setSheet(.init(results: viewStore.state.resultList.results)))
+                    }
+                    .sheet(item: viewStore.binding(get: \.resultListStateModal?.value, send: GameReducer.Action.setSheet), onDismiss: {
+                        viewStore.send(.dismissSheet)
+                    }) { results in
+                        IfLetStore(store.scope(state: \.resultListStateModal?.value,
+                                               action: GameReducer.Action.resultList),
+                                                then: { GameResultListView(store: $0) })
+                    }
                 }
             }
         }

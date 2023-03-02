@@ -20,6 +20,8 @@ public struct GameReducer: ReducerProtocol {
         var resultListState: Identified<UUID, GameResultListReducer.State>?
         var alert: AlertState<GameAlertAction>?
         var savingResults: Bool = false
+
+        var resultListStateModal: Identified<UUID, GameResultListReducer.State>?
     }
 
     public enum Action {
@@ -29,6 +31,8 @@ public struct GameReducer: ReducerProtocol {
         case setNavigation(UUID?)
         case alertAction(GameAlertAction)
         case saveResult(Result<Void, URLError>)
+        case setSheet(GameResultListReducer.State?)
+        case dismissSheet
     }
 
     public enum GameAlertAction: Equatable {
@@ -83,6 +87,12 @@ public struct GameReducer: ReducerProtocol {
                 state.savingResults = false
                 state.resultList.results = state.resultListState?.value.results ?? []
                 state.resultListState = nil
+                return .none
+            case .setSheet(item: .some(let item)):
+                state.resultListStateModal = .init(state.resultList, id: item.id)
+                return .none
+            case .dismissSheet:
+                state.resultListStateModal = nil
                 return .none
             default:
                 return .none

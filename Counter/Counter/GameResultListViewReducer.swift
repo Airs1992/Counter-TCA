@@ -9,7 +9,8 @@ import Foundation
 import ComposableArchitecture
 
 public struct GameResultListReducer: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Identifiable {
+        public var id: UUID = UUID()
         var results = IdentifiedArrayOf<GameReducer.GameResult>()
     }
     
