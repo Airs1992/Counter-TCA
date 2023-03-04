@@ -22,13 +22,16 @@ public struct GameReducer: ReducerProtocol {
         var savingResults: Bool = false
 
         var resultListStateModal: Identified<UUID, GameResultListReducer.State>?
+
+        var isNavigationActive: Bool = false
     }
 
     public enum Action {
         case counter(CounterReducer.Action)
         case timer(TimerReducer.Action)
         case resultList(GameResultListReducer.Action)
-        case setNavigation(UUID?)
+//        case setNavigation(UUID?)
+        case setNavigation(isActive: Bool)
         case alertAction(GameAlertAction)
         case saveResult(Result<Void, URLError>)
         case setSheet(GameResultListReducer.State?)
@@ -47,23 +50,36 @@ public struct GameReducer: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .counter(.playNext):
-                let result = GameResult(counter: state.counter, timeSpent: state.timer.duration - state.lastTimestamp)
-                state.resultList.results.append(result)
+                state.resultList.results.append(state.counter)
                 state.lastTimestamp = state.timer.duration
                 return .none
-            case .setNavigation(.some(let id)):
-                // ここでresultListStateを新しく作ってナビゲーション発動する事によって、遷移先のGameResultListがstateの変更がある場合、その修正が全てresultListState.value内に渡される、resultListState.valueをresultListに渡さない限り、Gameのstateは昔のままになる（例えばユーザーをstateの変更をやめる場合、昔のstateに戻るのが可能になる）
-                state.resultListState = .init(state.resultList, id: id)
+//            case .setNavigation(.some(let id)):
+//                // ここでresultListStateを新しく作ってナビゲーション発動する事によって、遷移先のGameResultListがstateの変更がある場合、その修正が全てresultListState.value内に渡される、resultListState.valueをresultListに渡さない限り、Gameのstateは昔のままになる（例えばユーザーをstateの変更をやめる場合、昔のstateに戻るのが可能になる）
+//                state.resultListState = .init(state.resultList, id: id)
+//                return .none
+            case .setNavigation(isActive: true):
+                state.isNavigationActive = true
+                state.resultListState = .init(state.resultList, id: state.resultList.id)
                 return .none
-            case .setNavigation(.none):
+//            case .setNavigation(.none):
+//                if state.resultListState?.value.results != state.resultList.results {
+//                    state.alert = .init(
+//                        title: .init("Save Changes?"),
+//                        primaryButton: .default(.init("OK"), action: .send(.alertSaveButtonTapped)),
+//                        secondaryButton: .cancel(.init("Cancel"), action: .send(.alertCancelButtonTapped))
+//                    )
+//                } else {
+//                    state.resultListState = nil
+//                }
+//                return .none
+            case .setNavigation(isActive: false):
+                state.isNavigationActive = false
                 if state.resultListState?.value.results != state.resultList.results {
                     state.alert = .init(
                         title: .init("Save Changes?"),
                         primaryButton: .default(.init("OK"), action: .send(.alertSaveButtonTapped)),
                         secondaryButton: .cancel(.init("Cancel"), action: .send(.alertCancelButtonTapped))
                     )
-                } else {
-                    state.resultListState = nil
                 }
                 return .none
             // .alertDismissはアラートがdismissされた後に発動する、その後TCAは具体出来にどのボタンタップされたによってbindingされたアクションを送信する、なので.alertDismiss内でnilを設定する、.alertSaveButtonTappedと.alertCancelButtonTapped内でロジックを書く

@@ -15,17 +15,17 @@ struct CounterApp: App {
         let resultListStateTag = UUID()
         let resultListStateTagModal = UUID()
 
-        let sample: IdentifiedArrayOf<GameReducer.GameResult> = [
-            .init(counter: .init(id: .init(), secret: 10, count: 10), timeSpent: 100),
-            .init(counter: .init(), timeSpent: 100),
+        let sample: IdentifiedArrayOf<CounterReducer.State> = [
+            .init(id: .init(), secret: 10, count: 10),
+            .init(),
         ]
 
         let testState = GameReducer.State(
           counter: .init(),
           timer: .init(),
           resultList: .init(results: sample),
-          lastTimestamp: 100,
-          resultListState: .init(.init(results: sample), id: resultListStateTag)
+          lastTimestamp: 100
+//          resultListState: .init(.init(results: sample), id: resultListStateTag)
 //          resultListStateModal: .init(.init(results: sample), id: resultListStateTagModal)
         )
 

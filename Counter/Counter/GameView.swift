@@ -9,7 +9,6 @@ import SwiftUI
 import ComposableArchitecture
 
 struct GameView: View {
-    let resultListStateTag = UUID()
     let resultListStateTagModal = UUID()
     let store: StoreOf<GameReducer>
     var body: some View {
@@ -20,6 +19,8 @@ struct GameView: View {
                     resultLabel(viewStore.state.elements)
                 }.onAppear {
                     viewStore.send(.timer(.start))
+                }.onDisappear {
+                    viewStore.send(.timer(.stop))
                 }
             }
             TimerView(store: store.scope(state: \.timer, action: GameReducer.Action.timer))
@@ -31,19 +32,25 @@ struct GameView: View {
 //                    GameResultListView(store: store.scope(state: \.resultList, action: GameReducer.Action.resultList))
 //                }
                 
-                WithViewStore(store) { viewStore in
-                    // 1. selection発動後 .setNavigation(resultListStateTag)が送信される、reducerでアクションを取る、stateを更新する
-                    // 2. NavigationLinkはselectionがbindingされたstateの値とtagの値比べます、同一の場合、destination内のビューに遷移する（statesを変更すると、画面が変わる仕組みになってます）
-                    // 3. IfLetStoreはオプショナルの値を判定し、nilじゃない場合thenの処理に入る、中の引数はscopeされたstoreとアクション（以下の場合stateはresultListState?.value、actionはGameReducer.Action.resultList、なので$0を使ってGameResultListView作成する事が可能）
-                    NavigationLink(tag: viewStore.resultListState?.id ?? resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
+                WithViewStore(store.scope(state: \.isNavigationActive), observe: { $0 }) { viewStore in
+//                    // 1. selection発動後 .setNavigation(resultListStateTag)が送信される、reducerでアクションを取る、stateを更新する
+//                    // 2. NavigationLinkはselectionがbindingされたstateの値とtagの値比べます、同一の場合、destination内のビューに遷移する（statesを変更すると、画面が変わる仕組みになってます）
+//                    // 3. IfLetStoreはオプショナルの値を判定し、nilじゃない場合thenの処理に入る、中の引数はscopeされたstoreとアクション（以下の場合stateはresultListState?.value、actionはGameReducer.Action.resultList、なので$0を使ってGameResultListView作成する事が可能）
+//                    NavigationLink(tag: viewStore.resultListState?.id ?? resultListStateTag, selection: viewStore.binding(get: \.resultListState?.id, send: GameReducer.Action.setNavigation), destination: {
+                    NavigationLink(isActive: viewStore.binding(get: { $0 }, send: GameReducer.Action.setNavigation), destination: {
                         IfLetStore(store.scope(state: \.resultListState?.value,
                                               action: GameReducer.Action.resultList),
-                                                then: { GameResultListView(store: $0) })
+                                                then: { GameResultListView(store: $0)
+                            
+                        })
                     }, label: {
-                        if viewStore.savingResults {
-                            ProgressView()
-                        } else {
-                            Text("Detail")
+                        
+                        WithViewStore(store.scope(state: \.savingResults), observe: { $0 }) { viewStore in
+                            if viewStore.state {
+                                ProgressView()
+                            } else {
+                                Text("Detail")
+                            }
                         }
                     })
                 }
@@ -71,7 +78,7 @@ struct GameView: View {
         )
     }
 
-    func resultLabel(_ results: [GameReducer.GameResult]) -> some View {
+    func resultLabel(_ results: [CounterReducer.State]) -> some View {
       Text("Result: \(results.filter(\.correct).count)/\(results.count) correct")
     }
 }

@@ -13,6 +13,7 @@ public struct CounterReducer: ReducerProtocol {
         public var id: UUID = UUID()
         var secret = Int.random(in: -100 ... 100)
         var count = 0
+        var correct: Bool { secret == count }
         var colorHex = 0x000000
         // @BindingStatとBindableAction、case binding(BindingAction<State>)入れるとアクション追加しなくてもBindingは成立します。
         @BindingState var toggleState: Bool = false

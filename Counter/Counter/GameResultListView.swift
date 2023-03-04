@@ -13,13 +13,28 @@ struct GameResultListView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                ForEach(viewStore.state.results) { result in
-                    HStack {
-                        Image(systemName: result.correct ? "checkmark.circle" : "x.circle")
-                        Text("Secret: \(result.counter.secret)")
-                        Text("Answer: \(result.counter.count)")
+                ForEachStore(
+                  self.store.scope(state: \.results, action: GameResultListReducer.Action.row(id:action:))
+                ) { rowStore in
+                    WithViewStore(rowStore, observe: { $0 }) { rowViewStore in
+                        NavigationLink(
+                          destination: CounterView(store: rowStore),
+                          tag: rowViewStore.id,
+                          selection: viewStore.binding(
+                            get: \.selection?.id,
+                            send: GameResultListReducer.Action.setNavigation(selection:)
+                          )
+                        ) {
+                            HStack {
+                                Image(systemName: rowViewStore.state.correct ? "checkmark.circle" : "x.circle")
+                                Text("Secret: \(rowViewStore.state.secret)")
+                                Text("Answer: \(rowViewStore.state.count)")
+                            }
+                            .foregroundColor(rowViewStore.state.correct ? .green : .red)
+                        }
+
+
                     }
-                    .foregroundColor(result.correct ? .green : .red)
                 }
                 .onDelete { viewStore.send(.remove(offset: $0)) }
             }
@@ -35,10 +50,8 @@ struct GameResultListView_Previews: PreviewProvider {
         GameResultListView(
             store: .init(
                 initialState: .init(results: [
-                    GameReducer.GameResult(
-                        counter: .init(id: .init(), secret: 20, count: 20), timeSpent: 100),
-                    GameReducer.GameResult(
-                        counter: .init(), timeSpent: 100)
+                    CounterReducer.State(id: .init(), secret: 20, count: 20),
+                    CounterReducer.State()
                 ]),
                 reducer: GameResultListReducer()
             )
