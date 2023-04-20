@@ -43,7 +43,7 @@ public struct CounterView: View {
                 Button("Reset") { viewStore.send(.reset) }
                 Button("Next") { viewStore.send(.playNext) }
                 Slider(value: viewStore.binding(get: \.countFloat, send: CounterReducer.Action.slidingCount), in: -100...100)
-                Toggle("Toggle", isOn: viewStore.binding(get: \.toggleState, send: CounterReducer.Action.setToggleState))
+                Toggle("Toggle", isOn: viewStore.binding(\.$toggleState))
             }
             .padding(20)
         }

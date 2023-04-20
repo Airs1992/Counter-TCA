@@ -32,44 +32,48 @@ public struct CounterReducer: ReducerProtocol {
 
     @Dependency(\.generateRandom) var generateRandom
 
-    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-        case .decrement:
-            state.count -= 1
-            return .send(.changeCountColor(state.count))
-        case .increment:
-            state.count += 1
-            return .send(.changeCountColor(state.count))
-        case .reset:
-            state.count = 0
-            state.colorHex = 0x000000
-            return .none
-        case .changeCountColor(let count):
-            if count > 0 {
-                state.colorHex = 0x00FF00
-            } else if count < 0 {
-                state.colorHex = 0xFF0000
-            } else {
+
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .decrement:
+                state.count -= 1
+                return .send(.changeCountColor(state.count))
+            case .increment:
+                state.count += 1
+                return .send(.changeCountColor(state.count))
+            case .reset:
+                state.count = 0
                 state.colorHex = 0x000000
+                return .none
+            case .changeCountColor(let count):
+                if count > 0 {
+                    state.colorHex = 0x00FF00
+                } else if count < 0 {
+                    state.colorHex = 0xFF0000
+                } else {
+                    state.colorHex = 0x000000
+                }
+                return .none
+            case .slidingCount(let value):
+                state.countFloat = value
+                return .none
+            case .setCount(let text):
+                state.countString = text
+                return .send(.setToggleState(text.count >= 1))
+            case .binding:
+                return .none
+            case .setToggleState(let flag):
+                state.toggleState = flag
+                return .none
+            case .playNext:
+                state.count = 0
+                state.colorHex = 0x000000
+                state.secret = generateRandom.generateRandomInt(-100 ... 100)
+                return .none
             }
-            return .none
-        case .slidingCount(let value):
-            state.countFloat = value
-            return .none
-        case .setCount(let text):
-            state.countString = text
-            return .send(.setToggleState(text.count >= 1))
-        case .binding:
-            return .none
-        case .setToggleState(let flag):
-            state.toggleState = flag
-            return .none
-        case .playNext:
-            state.count = 0
-            state.colorHex = 0x000000
-            state.secret = generateRandom.generateRandomInt(-100 ... 100)
-            return .none
         }
+        BindingReducer()
     }
 }
 
