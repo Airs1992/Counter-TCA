@@ -12,6 +12,18 @@ import XCTest
 
 @MainActor
 final class CounterTests: XCTestCase {
+
+    func test() {
+        let store = TestStore(
+            initialState: CounterReducer.State(),
+            reducer: CounterReducer()
+        )
+
+        store.send(.binding(.set(\.$toggleState, true))) { state in
+            state.toggleState = true
+        }
+    }
+
     func testCounterIncrement() async throws {
 
         let store = TestStore(
