@@ -27,23 +27,17 @@ public struct CounterView: View {
             VStack {
                 checkLabel(with: viewStore.checkResult)
                 HStack {
-                    // 1
                     Button("-") { viewStore.send(.decrement) }
                     TextField(
                         String(viewStore.count),
-                        // bindingはsetCount(count)Actionをreducerに渡す、後はreducer内でstateを更新する。
-                        // get:内に設定したValueはreducer内更新したValue
                         text: viewStore.binding(get: \.countString, send: CounterReducer.Action.setCount)
                     )
                     .frame(width: 40)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color.init(hex: UInt(viewStore.state.colorHex)))
                     Button("+") { viewStore.send(.increment) }
                 }
                 Button("Reset") { viewStore.send(.reset) }
                 Button("Next") { viewStore.send(.playNext) }
-                Slider(value: viewStore.binding(get: \.countFloat, send: CounterReducer.Action.slidingCount), in: -100...100)
-                Toggle("Toggle", isOn: viewStore.binding(\.$toggleState))
             }
             .padding(20)
         }

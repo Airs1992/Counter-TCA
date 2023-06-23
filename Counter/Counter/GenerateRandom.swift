@@ -13,13 +13,20 @@ struct GenerateRandom {
     var generateRandomInt: (ClosedRange<Int>) -> Int
 }
 
+extension GenerateRandom: TestDependencyKey {
+    static let previewValue = Self { _ in
+        return 7
+    }
+
+    static let testValue = Self(
+        generateRandomInt: unimplemented("\(Self.self).generateRandomInt")
+    )
+}
+
 extension GenerateRandom: DependencyKey {
     static var liveValue: GenerateRandom {
         return .init(generateRandomInt: { Int.random(in: $0) })
     }
-    static let testValue = Self(
-        generateRandomInt: unimplemented("\(Self.self).generateRandomInt")
-    )
 }
 
 extension DependencyValues {
