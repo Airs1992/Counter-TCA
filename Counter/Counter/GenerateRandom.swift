@@ -15,7 +15,7 @@ struct GenerateRandom {
 
 extension GenerateRandom: TestDependencyKey {
     static let previewValue = Self { _ in
-        return 7
+        return 14
     }
 
     static let testValue = Self(

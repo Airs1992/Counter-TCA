@@ -57,12 +57,12 @@ final class CounterTests: XCTestCase {
         }
     }
 
-    func testSetCount() async throws {
+    func testNext() async throws {
         let store = TestStore(
             initialState: CounterReducer.State(),
             reducer: CounterReducer()
         )
-//        store.dependencies.generateRandom.generateRandomInt = { _ in 4 }
+        store.dependencies.generateRandom.generateRandomInt = { _ in 4 }
 
         await store.send(.playNext) { state in
             state.count = 0
