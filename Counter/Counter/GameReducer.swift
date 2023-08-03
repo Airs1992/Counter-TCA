@@ -22,7 +22,7 @@ public struct GameReducer: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .counter(.playNext):
-              let result = GameResult(secret: state.counter.secret, guess: state.counter.count)
+              let result = GameResult(counter: state.counter)
               state.results.append(result)
               return .none
             default:
@@ -36,9 +36,9 @@ public struct GameReducer: ReducerProtocol {
 }
 
 extension GameReducer {
-    struct GameResult: Equatable {
-        let secret: Int
-        let guess: Int
-        var correct: Bool { secret == guess }
+    struct GameResult: Equatable, Identifiable {
+        let counter: CounterReducer.State
+        var correct: Bool { counter.secret == counter.count }
+        var id: UUID { counter.id }
     }
 }
