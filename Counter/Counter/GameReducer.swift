@@ -11,11 +11,12 @@ import Foundation
 public struct GameReducer: ReducerProtocol {
     public struct State: Equatable {
         var counter: CounterReducer.State = .init()
-        var results: [GameResult] = []
+        var results = IdentifiedArrayOf<GameResult>()
     }
 
     public enum Action {
         case counter(CounterReducer.Action)
+        case gameResultList(GameResultListReducer.Action)
     }
 
     public var body: some ReducerProtocol<State, Action> {

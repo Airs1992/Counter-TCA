@@ -18,6 +18,8 @@
 		F127C1C929A4FF3F00A4E1C6 /* CounterReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F127C1C829A4FF3F00A4E1C6 /* CounterReducer.swift */; };
 		F177EA2D2A7BF9B70088DA49 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F177EA2C2A7BF9B70088DA49 /* GameView.swift */; };
 		F177EA312A7BF9D20088DA49 /* GameReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F177EA2E2A7BF9CA0088DA49 /* GameReducer.swift */; };
+		F177EA332A7C9B650088DA49 /* GameResultListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F177EA322A7C9B650088DA49 /* GameResultListView.swift */; };
+		F177EA352A7C9B720088DA49 /* GameResultListViewReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F177EA342A7C9B720088DA49 /* GameResultListViewReducer.swift */; };
 		F17A4C9929A90FD7002D6E98 /* GenerateRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17A4C9829A90FD7002D6E98 /* GenerateRandom.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +54,8 @@
 		F127C1C829A4FF3F00A4E1C6 /* CounterReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterReducer.swift; sourceTree = "<group>"; };
 		F177EA2C2A7BF9B70088DA49 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		F177EA2E2A7BF9CA0088DA49 /* GameReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameReducer.swift; sourceTree = "<group>"; };
+		F177EA322A7C9B650088DA49 /* GameResultListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResultListView.swift; sourceTree = "<group>"; };
+		F177EA342A7C9B720088DA49 /* GameResultListViewReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResultListViewReducer.swift; sourceTree = "<group>"; };
 		F17A4C9829A90FD7002D6E98 /* GenerateRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRandom.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,6 +116,8 @@
 				F127C1A129A4FD0100A4E1C6 /* Preview Content */,
 				F177EA2C2A7BF9B70088DA49 /* GameView.swift */,
 				F177EA2E2A7BF9CA0088DA49 /* GameReducer.swift */,
+				F177EA322A7C9B650088DA49 /* GameResultListView.swift */,
+				F177EA342A7C9B720088DA49 /* GameResultListViewReducer.swift */,
 			);
 			path = Counter;
 			sourceTree = "<group>";
@@ -281,6 +287,8 @@
 				F127C19E29A4FCFB00A4E1C6 /* CounterView.swift in Sources */,
 				F127C1C929A4FF3F00A4E1C6 /* CounterReducer.swift in Sources */,
 				F127C19C29A4FCFB00A4E1C6 /* CounterApp.swift in Sources */,
+				F177EA352A7C9B720088DA49 /* GameResultListViewReducer.swift in Sources */,
+				F177EA332A7C9B650088DA49 /* GameResultListView.swift in Sources */,
 				F17A4C9929A90FD7002D6E98 /* GenerateRandom.swift in Sources */,
 				F177EA2D2A7BF9B70088DA49 /* GameView.swift in Sources */,
 			);
