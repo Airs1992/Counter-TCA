@@ -11,7 +11,7 @@ import Foundation
 public struct GameReducer: ReducerProtocol {
     public struct State: Equatable {
         var counter: CounterReducer.State = .init()
-        var results = IdentifiedArrayOf<GameResult>()
+        var resultList = GameResultListReducer.State(results: IdentifiedArrayOf<GameReducer.GameResult>())
     }
 
     public enum Action {
@@ -24,7 +24,7 @@ public struct GameReducer: ReducerProtocol {
             switch action {
             case .counter(.playNext):
               let result = GameResult(counter: state.counter)
-              state.results.append(result)
+              state.resultList.results.append(result)
               return .none
             default:
               return .none
@@ -32,6 +32,9 @@ public struct GameReducer: ReducerProtocol {
         }
         Scope(state: \.counter, action: /Action.counter) {
             CounterReducer()
+        }
+        Scope(state: \.resultList, action: /Action.gameResultList) {
+            GameResultListReducer()
         }
     }
 }

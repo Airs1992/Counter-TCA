@@ -43,7 +43,7 @@ public struct CounterReducer: ReducerProtocol {
                 return .none
             case .playNext:
                 state.count = 0
-//                state.secret = Int.random(in: -100 ... 100)
+                state.id = UUID()
                 state.secret = generateRandom.generateRandomInt(-100 ... 100)
                 return .none
             }

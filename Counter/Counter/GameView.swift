@@ -13,8 +13,15 @@ struct GameView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
-                Text("ゲーム回数：" + String(viewStore.results.count))
+                Text("ゲーム回数：" + String(viewStore.resultList.results.count))
                 CounterView(store: store.scope(state: \.counter, action: GameReducer.Action.counter))
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink("Detail") {
+                    GameResultListView(store: store.scope(state: \.resultList, action: GameReducer.Action.gameResultList))
+                }
             }
         }
     }
