@@ -12,11 +12,13 @@ public struct GameReducer: ReducerProtocol {
     public struct State: Equatable {
         var counter: CounterReducer.State = .init()
         var resultList = GameResultListReducer.State(results: IdentifiedArrayOf<GameReducer.GameResult>())
+        var selectionResultList: Identified<UUID, GameResultListReducer.State>?
     }
 
     public enum Action {
         case counter(CounterReducer.Action)
         case gameResultList(GameResultListReducer.Action)
+        case setNavigation(UUID?)
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -26,6 +28,13 @@ public struct GameReducer: ReducerProtocol {
               let result = GameResult(counter: state.counter)
               state.resultList.results.append(result)
               return .none
+            case .setNavigation(.some(let id)):
+              state.selectionResultList = .init(state.resultList, id: id)
+              return .none
+            case .setNavigation(.none):
+              state.resultList.results = state.selectionResultList?.value.results ?? []
+              state.selectionResultList = nil
+              return .none
             default:
               return .none
             }
@@ -33,8 +42,10 @@ public struct GameReducer: ReducerProtocol {
         Scope(state: \.counter, action: /Action.counter) {
             CounterReducer()
         }
-        Scope(state: \.resultList, action: /Action.gameResultList) {
-            GameResultListReducer()
+        .ifLet(\State.selectionResultList, action: /Action.gameResultList) {
+            Scope(state: \Identified<UUID, GameResultListReducer.State>.value, action: .self) {
+                GameResultListReducer()
+            }
         }
     }
 }
